@@ -6,14 +6,16 @@ namespace Horo
 {
     public class PlayerManager : CharacterManager
     {
-        PlayerLocomotionManager playerLocomotionManager;
+        [HideInInspector] public PlayerAnimatorManager playerAnimatorManager;
+        [HideInInspector] public PlayerLocomotionManager playerLocomotionManager;
+
         protected override void Awake()
         {
             base.Awake();
 
             // Do more stuff, only for the Player
-
             playerLocomotionManager = GetComponent<PlayerLocomotionManager>();
+            playerAnimatorManager = GetComponent<PlayerAnimatorManager>();
         }
 
         protected override void Update()
@@ -25,6 +27,28 @@ namespace Horo
                 return;
             // Handle movement
             playerLocomotionManager.HandleAllMovement();
+        }
+
+        protected override void LateUpdate()
+        {
+            if(!IsOwner) 
+                return;
+
+            base.LateUpdate();
+
+            PlayerCamera.instance.HandleAllCameraActions();
+        }
+
+        public override void OnNetworkSpawn()
+        {
+            base.OnNetworkSpawn();
+
+            //If this the player obejct owned by this clent
+            if(IsOwner)
+            {
+                PlayerCamera.instance.player = this;
+                PlayerInputManager.instance.player = this;
+            }
         }
     }
 }

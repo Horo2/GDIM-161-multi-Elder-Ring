@@ -10,17 +10,21 @@ namespace Horo
     public class PlayerInputManager : MonoBehaviour
     {
         public static PlayerInputManager instance;
-        //Think about goals in steps
-        //1. Find a way to read the values of a joy stick
-        //2. Move characvter based on those values
+
+        public PlayerManager player;
 
         PlayerControls playerControls;
 
-        [SerializeField] private Vector2 MovementInput;
+        [Header("Player Movement Input")]
+        [SerializeField] private Vector2 movementInput;
         public float horizontalInput;
         public float verticalInput;
         public float moveAmount;
 
+        [Header("Camera Movement Input")]
+        [SerializeField] private Vector2 cameraInput;
+        public float cameraHorizontalInput;
+        public float cameraVerticalInput;
         private void Awake()
         {
             if (instance == null) { instance = this; }
@@ -66,7 +70,8 @@ namespace Horo
                 //它定义了当事件发生时应该执行的具体行动。在这个表达式中："i"是事件的上下文，包含了该事件的所有相关数据。
                     //"i.ReadValue<Vector2>()" 是从这个上下文中提取具体的输入数据
                     //"MovementInput = i.ReadValue<Vector2>()" 将这个二维向量赋值给 MovementInput
-                playerControls.PlayerMovement.Movement.performed += i => MovementInput = i.ReadValue<Vector2>();
+                playerControls.PlayerMovement.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
+                playerControls.PlayerCamera.Movement.performed += i => cameraInput = i.ReadValue<Vector2>();
             }
 
             playerControls.Enable();
@@ -97,14 +102,15 @@ namespace Horo
         private void Update()
         {
             HandleMovementInput();
+            HandleCameraMovementInput();
         }
 
         // 将玩家按按键所输入的值读取并存储,随后以此更新水平和垂直输入变量
         private void HandleMovementInput()
         {
             // 提取玩家的垂直和水平输入
-            verticalInput = MovementInput.y;
-            horizontalInput = MovementInput.x;
+            verticalInput = movementInput.y;
+            horizontalInput = movementInput.x;
 
             // 计算输入强度，限定在0.5和1之间以简化速度级别
             moveAmount = Mathf.Clamp01(Mathf.Abs(verticalInput) + Mathf.Abs(horizontalInput));
@@ -118,6 +124,22 @@ namespace Horo
             {
                 moveAmount = 1;
             }
+
+            //Why do we pass 0 on the horizontal? because we only want non-strafing movement
+            //we use the horizontal when we are strafing or locked on
+
+            if(player == null)
+                return;
+            //if we are not locked on, only use the move amount
+            player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount);
+
+            //if we are locked on pass the horizontal movement as well
+        }
+
+        private void HandleCameraMovementInput() 
+        {
+            cameraVerticalInput = cameraInput.y;
+            cameraHorizontalInput = cameraInput.x;
         }
 
     }

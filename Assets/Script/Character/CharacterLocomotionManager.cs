@@ -10,5 +10,10 @@ namespace Horo
         {
 
         }
+
+        protected virtual void Update()
+        {
+
+        }
     }
 }

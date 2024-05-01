@@ -2,21 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using Unity.VisualScripting;
 
 namespace Horo
 {
     public class CharacterManager : NetworkBehaviour
     {
         public CharacterController characterController;
+        [HideInInspector] public Animator animator;
 
-        CharacterNetworkManager characterNetworkManager;
-
+        [HideInInspector] public CharacterNetworkManager characterNetworkManager;
        protected virtual void Awake()
         {
             DontDestroyOnLoad(this);
 
             characterController = GetComponent<CharacterController>();
-            characterNetworkManager = GetComponent<CharacterNetworkManager>();
+            animator = GetComponent<Animator>();
+            characterNetworkManager = GetComponent<CharacterNetworkManager>();          
         }
 
         protected virtual void Update()
@@ -52,6 +54,11 @@ namespace Horo
                     characterNetworkManager.networkRotation.Value, 
                     characterNetworkManager.networkRotationSmoothTime);
             }
+        }
+
+        protected virtual void LateUpdate()
+        {
+
         }
     }
 }

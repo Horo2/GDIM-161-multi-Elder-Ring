@@ -25,7 +25,26 @@ namespace Horo
             player = GetComponent<PlayerManager>();
         }
 
+        protected override void Update()
+        {
+            base.Update();
+            if(player.IsOwner)
+            {
+                player.characterNetworkManager.verticalMovement.Value = verticalMovement;
+                player.characterNetworkManager.horizontalMovement.Value = horizontalMovement;
+                player.characterNetworkManager.moveAmount.Value = moveAmount;
+            }
+            else
+            {
+                verticalMovement = player.characterNetworkManager.verticalMovement.Value;
+                horizontalMovement = player.characterNetworkManager.horizontalMovement.Value;
+                moveAmount = player.characterNetworkManager.moveAmount.Value;
 
+                //If not locked on, pass move amount
+                player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount);
+                // if locked on, pass HORZ and VERT
+            }
+        }
 
         public void HandleAllMovement()
         {
@@ -35,17 +54,17 @@ namespace Horo
             // Aerial Movement
         }
        
-        private void GetVerticalAndHorizontalInputs()
+        private void GetMovementValues()
         {
             verticalMovement = PlayerInputManager.instance.verticalInput;
             horizontalMovement = PlayerInputManager.instance.horizontalInput;
-
+            moveAmount = PlayerInputManager.instance.moveAmount;
             //Clamp the movements
         }
 
         private void HandleGroundedMovement()
         {
-            GetVerticalAndHorizontalInputs();
+            GetMovementValues();
 
             //角色的移动方向是基于相机的观看方向和玩家的输入
             // Our move direction is based on our cameras facing persprective & our movemnt inputs
