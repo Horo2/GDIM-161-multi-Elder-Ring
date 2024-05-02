@@ -14,17 +14,20 @@ namespace Horo
         public PlayerManager player;
 
         PlayerControls playerControls;
+      
+        [Header("CAMERA MOVEMENT INPUT")]
+        [SerializeField] private Vector2 cameraInput;
+        public float cameraHorizontalInput;
+        public float cameraVerticalInput;
 
-        [Header("Player Movement Input")]
+        [Header("PLAVER MOVEMENT INPUT")]
         [SerializeField] private Vector2 movementInput;
         public float horizontalInput;
         public float verticalInput;
         public float moveAmount;
 
-        [Header("Camera Movement Input")]
-        [SerializeField] private Vector2 cameraInput;
-        public float cameraHorizontalInput;
-        public float cameraVerticalInput;
+        [Header("PLAYER ACTION INPUT")]
+        [SerializeField] bool dodgeInput = false;
         private void Awake()
         {
             if (instance == null) { instance = this; }
@@ -72,6 +75,7 @@ namespace Horo
                     //"MovementInput = i.ReadValue<Vector2>()" 将这个二维向量赋值给 MovementInput
                 playerControls.PlayerMovement.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
                 playerControls.PlayerCamera.Movement.performed += i => cameraInput = i.ReadValue<Vector2>();
+                playerControls.PlayerActions.Dodge.performed += i => dodgeInput = true;
             }
 
             playerControls.Enable();
@@ -101,12 +105,19 @@ namespace Horo
 
         private void Update()
         {
-            HandleMovementInput();
-            HandleCameraMovementInput();
+            HandleAllInputs();
         }
 
+        private void HandleAllInputs()
+        {
+            HandlePlayerMovementInput();
+            HandleCameraMovementInput();
+            HandleDodgeInput();
+        }
+
+        //MOVEMENT
         // 将玩家按按键所输入的值读取并存储,随后以此更新水平和垂直输入变量
-        private void HandleMovementInput()
+        private void HandlePlayerMovementInput()
         {
             // 提取玩家的垂直和水平输入
             verticalInput = movementInput.y;
@@ -135,11 +146,24 @@ namespace Horo
 
             //if we are locked on pass the horizontal movement as well
         }
-
         private void HandleCameraMovementInput() 
         {
             cameraVerticalInput = cameraInput.y;
             cameraHorizontalInput = cameraInput.x;
+        }
+
+        //ACTIONS
+        private void HandleDodgeInput()
+        {
+            if(dodgeInput)
+            {
+                dodgeInput = false;
+
+                // Future note: return (Do nothing) if menu or ui window is open
+
+                //perform a dodge
+                player.playerLocomotionManager.AttemptToPerformDodge();
+            }
         }
 
     }

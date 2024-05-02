@@ -7,6 +7,8 @@ namespace Horo
 {
     public class CharacterNetworkManager : NetworkBehaviour
     {
+        CharacterManager character;
+
         [Header("Position")]
         //if you own this character you can edit this character position, if you dont you only can read it.
         // 获取主机所拥有的角色在网络的上的坐标，转向等并存储
@@ -20,5 +22,38 @@ namespace Horo
         public NetworkVariable<float> horizontalMovement = new NetworkVariable<float>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         public NetworkVariable<float> verticalMovement = new NetworkVariable<float>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         public NetworkVariable<float> moveAmount= new NetworkVariable<float>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
+        protected virtual void Awake()
+        {
+            character = GetComponent<CharacterManager>();
+        }
+
+        //A server RPC is a Function called from a client, to the server (in our case the host)
+        [ServerRpc]
+        public void NotifyTheServerOfActionAnimationServerRpc(ulong clientID, string animationID, bool applyRootMotion)
+        {
+            // If this character is the host/server, then activate the client RPC
+            if(IsServer)
+            {
+                PlayActionAnimationForAllClientsClientRpc(clientID, animationID, applyRootMotion);
+            }
+        }
+
+        // A client RPC is sent to all clients present, from the server
+        [ClientRpc]
+        public void PlayActionAnimationForAllClientsClientRpc(ulong clientID, string animationID, bool applyRootMotion)
+        {
+            // we make sure to not run the function o the character who sent it (so we dont play the animation twice)
+            if(clientID != NetworkManager.Singleton.LocalClientId)
+            {
+                PerformActionAnimationFromServer(animationID, applyRootMotion);
+            }
+        }
+
+        private void PerformActionAnimationFromServer(string animationID, bool applyRootMotion)
+        {
+            character.applyRootMotion = applyRootMotion;
+            character.animator.CrossFade(animationID, 0.2f);
+        }
     }
 }

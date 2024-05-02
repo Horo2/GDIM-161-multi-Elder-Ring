@@ -8,15 +8,19 @@ namespace Horo
     {
         PlayerManager player;
         // those values only taking from PlayerInputManager Class
-        public float verticalMovement;
-        public float horizontalMovement;
-        public float moveAmount;
+        [HideInInspector] public float verticalMovement;
+        [HideInInspector] public float horizontalMovement;
+        [HideInInspector] public float moveAmount;
 
+        [Header("Movement Settings")]
         private Vector3 moveDirection;
         private Vector3 targetRotationDirection;
         [SerializeField] float walkingSpeed = 2;
         [SerializeField] float runningSpeed = 5;
         [SerializeField] float rotationSpeed = 15;
+
+        [Header("Dodge")]
+        private Vector3 rollDirection;
 
         protected override void Awake()
         {
@@ -48,9 +52,9 @@ namespace Horo
 
         public void HandleAllMovement()
         {
+            // Grounde Movement
             HandleGroundedMovement();
             HandleRotation();
-            // Grounde Movement
             // Aerial Movement
         }
        
@@ -64,8 +68,11 @@ namespace Horo
 
         private void HandleGroundedMovement()
         {
-            GetMovementValues();
+            if (!player.canMove)
+                return;
 
+            GetMovementValues();
+           
             //角色的移动方向是基于相机的观看方向和玩家的输入
             // Our move direction is based on our cameras facing persprective & our movemnt inputs
             moveDirection = PlayerCamera.instance.transform.forward * verticalMovement;
@@ -88,6 +95,9 @@ namespace Horo
         // 处理角色的旋转，使角色朝向由玩家输入决定的方向。
         private void HandleRotation()
         {
+            if(!player.canRotate)
+                return;
+
             // 初始化目标旋转方向为零向量。
             targetRotationDirection = Vector3.zero;
             // 根据垂直输入（前后移动），设置目标旋转方向为相机的前方。
@@ -110,5 +120,34 @@ namespace Horo
             transform.rotation = targetRotation;
 
         }
+
+        public void AttemptToPerformDodge()
+        {
+            if (player.isPerformingAction)
+                return; 
+
+            // If we are moveingwhen we attenpt to dodge, wen perform a roll
+            if(PlayerInputManager.instance.moveAmount > 0)
+            {
+                rollDirection = PlayerCamera.instance.cameraObject.transform.forward * PlayerInputManager.instance.verticalInput;
+                rollDirection += PlayerCamera.instance.cameraObject.transform.right * PlayerInputManager.instance.horizontalInput;
+                rollDirection.y = 0;
+                rollDirection.Normalize();
+
+                Quaternion playerRotation = Quaternion.LookRotation(rollDirection);
+                player.transform.rotation = playerRotation;
+
+                // Perform a roll animation
+                player.playerAnimatorManager.PlayerTargetActionAnimation("Roll_Forward_01", true, true);
+            }
+            // If we are statinoary, we perform a backstep
+            else
+            {
+                //Perform a backstep animation
+                player.playerAnimatorManager.PlayerTargetActionAnimation("Back_Step_01", true, true);
+            }    
+           
+        }
+
     }
 }
