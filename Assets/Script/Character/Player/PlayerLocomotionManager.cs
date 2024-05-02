@@ -17,6 +17,7 @@ namespace Horo
         private Vector3 targetRotationDirection;
         [SerializeField] float walkingSpeed = 2;
         [SerializeField] float runningSpeed = 5;
+        [SerializeField] float sprintingSpeed = 10;
         [SerializeField] float rotationSpeed = 15;
 
         [Header("Dodge")]
@@ -45,7 +46,7 @@ namespace Horo
                 moveAmount = player.characterNetworkManager.moveAmount.Value;
 
                 //If not locked on, pass move amount
-                player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount);
+                player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount, player.playerNetworkManager.isSprinting.Value);
                 // if locked on, pass HORZ and VERT
             }
         }
@@ -80,16 +81,23 @@ namespace Horo
             moveDirection.Normalize(); // Normalize()的作用是将向量值锁定到最大为1（整数）,归1
             moveDirection.y = 0;
 
-            if(PlayerInputManager.instance.moveAmount > 0.5f)
+            if(player.playerNetworkManager.isSprinting.Value)
             {
-                //Move at a running speed
-                player.characterController.Move(moveDirection * runningSpeed * Time.deltaTime);
+                player.characterController.Move(moveDirection * sprintingSpeed * Time.deltaTime);
             }
-            else if(PlayerInputManager.instance.moveAmount >=0.5f)
+            else
             {
-                //Move at walking speed
-                player.characterController.Move(moveDirection * walkingSpeed * Time.deltaTime);
-            }
+                if (PlayerInputManager.instance.moveAmount > 0.5f)
+                {
+                    //Move at a running speed
+                    player.characterController.Move(moveDirection * runningSpeed * Time.deltaTime);
+                }
+                else if (PlayerInputManager.instance.moveAmount >= 0.5f)
+                {
+                    //Move at walking speed
+                    player.characterController.Move(moveDirection * walkingSpeed * Time.deltaTime);
+                }
+            }           
         }
 
         // 处理角色的旋转，使角色朝向由玩家输入决定的方向。
@@ -119,6 +127,29 @@ namespace Horo
             // 应用计算出的目标旋转到对象的 Transform 上。
             transform.rotation = targetRotation;
 
+        }
+
+        public void HandleSprinting()
+        {
+            if(player.isPerformingAction)
+            {
+                // Set sprinting to false
+                player.playerNetworkManager.isSprinting.Value = false;
+            }
+
+            // If we are out of stamina, set sprinting to false
+
+
+            // If we are moving , Sprinting is true
+            if(moveAmount >= 0.5)
+            {
+                player.playerNetworkManager.isSprinting.Value = true;
+            }
+            // If we are stationary/moving slowly sprinting is false
+            else
+            {
+                player.playerNetworkManager.isSprinting.Value = false;
+            }
         }
 
         public void AttemptToPerformDodge()
