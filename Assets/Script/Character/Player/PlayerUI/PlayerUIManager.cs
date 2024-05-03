@@ -13,11 +13,14 @@ namespace Horo
         [Header("Network Join")]
         [SerializeField] private bool startGameAsClient;
 
+        [HideInInspector] public PlayerUIHudManager playerUIHudManager;
 
         private void Awake()
         {
             if (instance == null) { instance = this; }
             else { Destroy(gameObject); }
+
+            playerUIHudManager = GetComponentInChildren<PlayerUIHudManager>();
 
         }
 

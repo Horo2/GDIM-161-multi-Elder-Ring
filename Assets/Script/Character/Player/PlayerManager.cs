@@ -9,6 +9,7 @@ namespace Horo
         [HideInInspector] public PlayerAnimatorManager playerAnimatorManager;
         [HideInInspector] public PlayerLocomotionManager playerLocomotionManager;
         [HideInInspector] public PlayerNetworkManager playerNetworkManager;
+        [HideInInspector] public PlayerStatsManager playerStatsManager;
 
         protected override void Awake()
         {
@@ -18,6 +19,7 @@ namespace Horo
             playerLocomotionManager = GetComponent<PlayerLocomotionManager>();
             playerAnimatorManager = GetComponent<PlayerAnimatorManager>();
             playerNetworkManager = GetComponent<PlayerNetworkManager>();
+            playerStatsManager = GetComponent<PlayerStatsManager>();
         }
 
         protected override void Update()
@@ -29,6 +31,9 @@ namespace Horo
                 return;
             // Handle movement
             playerLocomotionManager.HandleAllMovement();
+
+            //Regen stamina
+            playerStatsManager.RegencerateStamina();
         }
 
         protected override void LateUpdate()
@@ -41,6 +46,7 @@ namespace Horo
             PlayerCamera.instance.HandleAllCameraActions();
         }
 
+        //不需要引用，是netcode自带的funtion，类似于update，变量数值填进去就会根据逻辑实时更新
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
@@ -50,6 +56,16 @@ namespace Horo
             {
                 PlayerCamera.instance.player = this;
                 PlayerInputManager.instance.player = this;
+
+                //当耐力发生变化时，实时反映到耐力UI上,调用的方法需要自带设置变量 Old Value和 New Value
+                playerNetworkManager.currentStamina.OnValueChanged += PlayerUIManager.instance.playerUIHudManager.SetNewStaminaValue;
+                playerNetworkManager.currentStamina.OnValueChanged += playerStatsManager.ResetStaminaRgenTimer;
+
+                // This will be moved when saving and loading is added
+                playerNetworkManager.maxStamina.Value = playerStatsManager.CalcuateStaminaBasedOnEnduranceLevel(playerNetworkManager.endurance.Value);
+                playerNetworkManager.currentStamina.Value = playerStatsManager.CalcuateStaminaBasedOnEnduranceLevel(playerNetworkManager.endurance.Value);
+                PlayerUIManager.instance.playerUIHudManager.SetMaxStaminaValue(playerNetworkManager.maxStamina.Value);
+                
             }
         }
     }

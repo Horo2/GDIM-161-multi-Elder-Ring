@@ -19,9 +19,11 @@ namespace Horo
         [SerializeField] float runningSpeed = 5;
         [SerializeField] float sprintingSpeed = 10;
         [SerializeField] float rotationSpeed = 15;
+        [SerializeField] int sprintingStaminaCost = 2;
 
         [Header("Dodge")]
         private Vector3 rollDirection;
+        [SerializeField] float dodgeStaminaCoust = 25;
 
         protected override void Awake()
         {
@@ -138,7 +140,11 @@ namespace Horo
             }
 
             // If we are out of stamina, set sprinting to false
-
+            if(player.playerNetworkManager.currentStamina.Value <=0)
+            {
+                player.playerNetworkManager.isSprinting.Value = false;
+                return;
+            }
 
             // If we are moving , Sprinting is true
             if(moveAmount >= 0.5)
@@ -150,13 +156,20 @@ namespace Horo
             {
                 player.playerNetworkManager.isSprinting.Value = false;
             }
+
+            if(player.playerNetworkManager.isSprinting.Value)
+            {
+                player.playerNetworkManager.currentStamina.Value -= sprintingStaminaCost * Time.deltaTime;
+            }
         }
 
         public void AttemptToPerformDodge()
         {
             if (player.isPerformingAction)
-                return; 
+                return;
 
+            if (player.playerNetworkManager.currentStamina.Value <= 0)
+                return;
             // If we are moveingwhen we attenpt to dodge, wen perform a roll
             if(PlayerInputManager.instance.moveAmount > 0)
             {
@@ -176,8 +189,11 @@ namespace Horo
             {
                 //Perform a backstep animation
                 player.playerAnimatorManager.PlayerTargetActionAnimation("Back_Step_01", true, true);
-            }    
-           
+            }
+
+            player.playerNetworkManager.currentStamina.Value -= dodgeStaminaCoust;
+
+
         }
 
     }

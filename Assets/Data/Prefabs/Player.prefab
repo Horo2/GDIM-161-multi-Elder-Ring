@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4579856220010044364}
   - component: {fileID: -204216023295418239}
   - component: {fileID: -7041619271619804640}
+  - component: {fileID: 3808127945900203948}
   - component: {fileID: -7540423292102285035}
   - component: {fileID: 696092243213038065}
   - component: {fileID: -862435619778825485}
@@ -83,6 +84,18 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &3808127945900203948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 17022164212094528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 005797446152ebb408355f89d3da5007, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &-7540423292102285035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105,6 +118,7 @@ MonoBehaviour:
   playerAnimatorManager: {fileID: 0}
   playerLocomotionManager: {fileID: 0}
   playerNetworkManager: {fileID: 0}
+  playerStatsManager: {fileID: 0}
 --- !u!114 &696092243213038065
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,6 +145,12 @@ MonoBehaviour:
   moveAmount:
     m_InternalValue: 0
   isSprinting:
+    m_InternalValue: 0
+  endurance:
+    m_InternalValue: 10
+  currentStamina:
+    m_InternalValue: 0
+  maxStamina:
     m_InternalValue: 0
 --- !u!114 &-862435619778825485
 MonoBehaviour:
