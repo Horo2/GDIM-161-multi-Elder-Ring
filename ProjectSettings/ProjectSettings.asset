@@ -899,8 +899,8 @@ PlayerSettings:
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: GDIM 161 multi Elder Ring
-  metroPackageVersion: 
+  metroPackageName: GDIM161multiElderRing
+  metroPackageVersion: 1.0.0.0
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
@@ -908,7 +908,7 @@ PlayerSettings:
   metroCertificateNotAfter: 0000000000000000
   metroApplicationDescription: GDIM 161 multi Elder Ring
   wsaImages: {}
-  metroTileShortName: 
+  metroTileShortName: GDIM 161 multi Elder Ring
   metroTileShowName: 0
   metroMediumTileShowName: 0
   metroLargeTileShowName: 0

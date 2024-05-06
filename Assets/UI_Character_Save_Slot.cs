@@ -187,5 +187,16 @@ namespace Horo
                 }
             }
         }
+
+        public void LoadGameFromCharacterSlot()
+        {
+            WorldSaveGameManager.instance.currentChracterSlotBeingUsed = characterSlot;
+            WorldSaveGameManager.instance.LoadGame();
+        }
+
+        public void SelectCurrentSlot()
+        {
+            TitleScreenManager.instance.SelecteCharacterSlot(characterSlot);
+        }
     }
 }

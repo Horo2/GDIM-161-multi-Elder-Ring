@@ -21,5 +21,6 @@ namespace Horo
         CharacterSlot_08,
         CharacterSlot_09,
         CharacterSlot_010,
+        NO_SLOT
     }
 }

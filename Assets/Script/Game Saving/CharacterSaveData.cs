@@ -7,9 +7,12 @@ namespace Horo
     [System.Serializable]
     //Since we want to reference this data for every save file, this script is no a monobehaviour and is instead serializable
     public class CharacterSaveData
-    {        
+    {
+        [Header("Scene Index")]
+        public int sceneIndex = 1;
+
         [Header("Character Name")]
-        public string characterName;
+        public string characterName = "Character";
 
         [Header("Time Played")]
         public float sceondsPlayed;

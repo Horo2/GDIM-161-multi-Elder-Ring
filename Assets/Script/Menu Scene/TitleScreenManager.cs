@@ -9,13 +9,40 @@ namespace Horo
 {
     public class TitleScreenManager : MonoBehaviour
     {
+        public static TitleScreenManager instance;
         [Header("Menu")]
         [SerializeField] GameObject titleScreenMainMenu;
         [SerializeField] GameObject titleScreenLoadMenu;
 
-        [Header("Buttons")]
+        [Header("Buttons")]       
         [SerializeField] Button LoadMenuReturnButton;
         [SerializeField] Button MainMenuLoadGameButton;
+        [SerializeField] Button mainMenuNewGameButton;
+        [SerializeField] Button deleteCharacterPopUpConfirmButton;
+
+        [Header("Pop Ups")]
+        [SerializeField] GameObject noCharacterSlotsPopUp;
+        [SerializeField] Button noCharacterSlotsOkayButton;
+        [SerializeField] GameObject deleteCharacterSlotPopUp;
+
+        [Header("Character Slot")]
+        public CharacterSlot currentSelectedSlot = CharacterSlot.NO_SLOT;
+
+
+        [Header("Title Screen Inputs")]
+        [SerializeField] bool deleteCharacterSlot = false;
+
+        private void Awake()
+        {
+            if(instance == null)
+            {
+                instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
         public void StartNetworkAsHost()
         {
             NetworkManager.Singleton.StartHost();
@@ -23,8 +50,8 @@ namespace Horo
 
         public void StartNewGame()
         {
-            WorldSaveGameManager.instance.CreateNewGame();
-            StartCoroutine(WorldSaveGameManager.instance.LoadWorldScene());
+            WorldSaveGameManager.instance.AttemptToCreateNewGame();
+            
         }
 
         public void OpenLoadGameMenu()
@@ -50,6 +77,60 @@ namespace Horo
             // Selected the Load button
             MainMenuLoadGameButton.Select();
         }
+
+        public void DisplayNoFreeCharacterSlotsPopUp()
+        {
+            noCharacterSlotsPopUp.SetActive(true);
+            noCharacterSlotsOkayButton.Select();
+        }
+
+        public void CloseNoFreeCharacterSlotsPopUp()
+        {
+            noCharacterSlotsPopUp.SetActive(false);
+            mainMenuNewGameButton.Select();
+
+
+        }
+
+        //Character Slots
+
+        public void SelecteCharacterSlot(CharacterSlot characterSlot)
+        {
+            currentSelectedSlot = characterSlot;
+        }
+
+        public void SelectNoSlot()
+        {
+            currentSelectedSlot = CharacterSlot.NO_SLOT;
+        }
+
+        public void AttemptToDeleteCharacterSlot()
+        {
+            if(currentSelectedSlot != CharacterSlot.NO_SLOT)
+            {
+                deleteCharacterSlotPopUp.SetActive(true);
+                deleteCharacterPopUpConfirmButton.Select();
+            }            
+        }
+
+        public void DeleteCharacterSlot()
+        {
+            deleteCharacterSlotPopUp.SetActive(false);
+            WorldSaveGameManager.instance.DeleteGame(currentSelectedSlot);
+
+            // We disable and then enable the load menu, to refresh to slots(the deleted slots will now become inactive)
+            titleScreenLoadMenu.SetActive(false);
+            titleScreenLoadMenu.SetActive(true);
+            LoadMenuReturnButton.Select();
+            
+        }
+        public void CloseDeleteCharacterSlotPopUp()
+        {
+            deleteCharacterSlotPopUp.SetActive(false);
+            LoadMenuReturnButton.Select();
+        }
+
+        
     }
 }
 
