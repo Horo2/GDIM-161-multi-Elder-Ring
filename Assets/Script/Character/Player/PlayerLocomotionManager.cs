@@ -24,6 +24,7 @@ namespace Horo
         [Header("Dodge")]
         private Vector3 rollDirection;
         [SerializeField] float dodgeStaminaCoust = 25;
+        [SerializeField] float jumpStaminaCoust = 25;
 
         protected override void Awake()
         {
@@ -194,6 +195,37 @@ namespace Horo
             player.playerNetworkManager.currentStamina.Value -= dodgeStaminaCoust;
 
 
+        }
+
+        public void AttemptToPerformJump()
+        {
+            // If we are performing an general action, we do not want to allow a jump(will change when combat is adde)
+            if (player.isPerformingAction)
+                return;
+
+            // If we are out of stamina, we do not wish to allow a jump
+            if (player.playerNetworkManager.currentStamina.Value <= 0)
+                return;
+
+            // If we are already in a jump, we do not want to allow a jump again until the current jump has finished
+            if (player.isJumping)
+                return;
+
+            //if we are not grounded, we do not want to allow a jump
+            if (!player.isGrounded)
+                return;
+
+            // If we are two handing our weapon, play the two handed jump animation, otherwise play the one handed animation (TO DO)
+            player.playerAnimatorManager.PlayerTargetActionAnimation("Main_Jump_01", false);
+
+            player.isJumping = true;
+
+            player.playerNetworkManager.currentStamina.Value -= jumpStaminaCoust;
+        }
+
+        public void ApplyJumpingVelocity()
+        {
+            // Apply an upward velocity depending on forces in our game
         }
 
     }

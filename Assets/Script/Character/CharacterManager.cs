@@ -15,6 +15,8 @@ namespace Horo
 
         [Header("Flags")]
         public bool isPerformingAction = false;
+        public bool isJumping = false;
+        public bool isGrounded = false;
         public bool applyRootMotion = false;
         public bool canRotate = true;
         public bool canMove = true;
@@ -33,6 +35,8 @@ namespace Horo
 
         protected virtual void Update()
         {
+            animator.SetBool("IsGrounded",isGrounded);
+
             // If this character is being controlled from our side, then assign its network position to the position of our transform
             if(IsOwner)
             {

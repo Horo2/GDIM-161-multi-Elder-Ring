@@ -29,6 +29,8 @@ namespace Horo
         [Header("PLAYER ACTION INPUT")]
         [SerializeField] bool dodgeInput = false;
         [SerializeField] bool sprintInput = false;
+        [SerializeField] bool jumpInput = false;
+
         private void Awake()
         {
             if (instance == null) { instance = this; }
@@ -77,6 +79,7 @@ namespace Horo
                 playerControls.PlayerMovement.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
                 playerControls.PlayerCamera.Movement.performed += i => cameraInput = i.ReadValue<Vector2>();
                 playerControls.PlayerActions.Dodge.performed += i => dodgeInput = true;
+                playerControls.PlayerActions.Jump.performed += i => jumpInput = true;
 
                 // Holiding the input, activates the bool to true
                 playerControls.PlayerActions.Sprint.performed += i => sprintInput = true;
@@ -119,7 +122,7 @@ namespace Horo
             HandlePlayerMovementInput();
             HandleCameraMovementInput();
             HandleDodgeInput();
-            HandleSpringting();
+            HandleSpringtingInput();
         }
 
         //MOVEMENT
@@ -173,7 +176,7 @@ namespace Horo
             }
         }
 
-        private void HandleSpringting()
+        private void HandleSpringtingInput()
         {
             if(sprintInput)
             {
@@ -183,6 +186,19 @@ namespace Horo
             else
             {
                 player.playerNetworkManager.isSprinting.Value = false;
+            }
+        }
+
+        private void HandleJumpInput()
+        {
+            if(jumpInput)
+            {
+                jumpInput = false;
+
+                // If we have a UI window open, simply return without doing anything
+
+                // Attemp to perform jump
+                player.playerLocomotionManager.AttemptToPerformJump();
             }
         }
 
