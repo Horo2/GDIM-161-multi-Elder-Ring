@@ -42,11 +42,13 @@ namespace Horo
         {
             character.applyRootMotion = applyRootMotion;
             character.animator.CrossFade(targetAnimation, 0.2f);
-            //CAN BE USE TO STOP CHARACTER FROM ATTEMPTING NEW ACTIONS
+            // CAN BE USE TO STOP CHARACTER FROM ATTEMPTING NEW ACTIONS
             // FOR EXAMPLE, IF YOU GET DAMAGED, AND BEGIN PERFORMING A DAMAGE ANIMATION
             // THIS FLAG WILL TURN TRUE IF YOU ARE STUNNED
             // WE CAN THEN CHECK FOR THIS BEFORE ATTEMPTING NEW ACTIONS
-            character.isPerformingAction = isPerformingAction;
+
+            // if character can do other action(animation) during current action, set this true(such as you want to airattack during jumping)
+            character.isPerformingAction = isPerformingAction;  
             character.canRotate = canRotate;
             character.canMove = canMove;
 

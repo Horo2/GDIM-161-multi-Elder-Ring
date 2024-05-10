@@ -10,7 +10,7 @@ namespace Horo
         SaveFileDataWriter saveFileWriter;
 
         [Header("Game slot")]
-        public CharacterSlot characterSlot;
+        public CharacterSlot characterSlot; // 需要在存档槽的UI中，手动选择这个SlotUI属于哪个Slot，例如UI2属于characterSlot_02 etc
 
         [Header("Character Info")]
         public TextMeshProUGUI characterName;
@@ -21,6 +21,7 @@ namespace Horo
             LoadSaveSlots();
         }
 
+        //先判定对应的槽位组件是否有存档，如果有则将角色名字，游玩时间等信息显示到对应的UI组件上，如果没有，则disable对应的 UI gameobject。
         private void LoadSaveSlots()
         {
             saveFileWriter = new SaveFileDataWriter();
@@ -188,12 +189,15 @@ namespace Horo
             }
         }
 
+        //在 Save Slot (0) 等的 button组件中调用这个method 来判定点击时，要读取哪个槽位
         public void LoadGameFromCharacterSlot()
         {
+            
             WorldSaveGameManager.instance.currentChracterSlotBeingUsed = characterSlot;
             WorldSaveGameManager.instance.LoadGame();
         }
 
+        //在 Save Slot (0) 等的 event trigger组件中调用这个method 来判定目前选中的是哪个存档槽
         public void SelectCurrentSlot()
         {
             TitleScreenManager.instance.SelecteCharacterSlot(characterSlot);

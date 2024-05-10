@@ -265,6 +265,8 @@ namespace Horo
             saveFileDataWriter.saveDataDirectoryPath = Application.persistentDataPath;
             saveFileDataWriter.saveFileName = saveFileName;
 
+            // Doing specific save data action
+
             // Pass the players info, from game, to their save file
             player.SaveGameDataToCurrentCharacterData(ref currentCharacterData);
 

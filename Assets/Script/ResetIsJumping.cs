@@ -4,22 +4,21 @@ using UnityEngine;
 
 namespace Horo
 {
-    public class ResetActionFlag : StateMachineBehaviour
+    public class ResetIsJumping : StateMachineBehaviour
     {
         CharacterManager character;
         // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if(character == null)
+            if (character == null)
             {
                 character = animator.GetComponent<CharacterManager>();
             }
 
-            // THIS IS CALL WHEN AN ACTION ENDS, AND THE STATE RETURNS TO "EMPTY"
-            character.isPerformingAction = false;
-            character.applyRootMotion = false;
-            character.canMove = true;
-            character.canRotate = true;                       
+            character.isJumping = false;
+
+            // If you want to change the landing animation to a rolling landing and make the character move, change the canMove here.
+            // character.canMove = true;
         }
 
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -47,4 +46,3 @@ namespace Horo
         //}
     }
 }
-

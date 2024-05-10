@@ -123,6 +123,7 @@ namespace Horo
             HandleCameraMovementInput();
             HandleDodgeInput();
             HandleSpringtingInput();
+            HandleJumpInput();
         }
 
         //MOVEMENT

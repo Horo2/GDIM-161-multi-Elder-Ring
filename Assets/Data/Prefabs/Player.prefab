@@ -244,7 +244,7 @@ MonoBehaviour:
   groundCheckSphereRadius: 0.3
   yVelocity: {x: 0, y: 0, z: 0}
   groundedYVelocity: -20
-  fallstartYvelocity: -5
+  fallstartYVelocity: -5
   verticalMovement: 0
   horizontalMovement: 0
   moveAmount: 0
@@ -253,8 +253,11 @@ MonoBehaviour:
   sprintingSpeed: 10
   rotationSpeed: 15
   sprintingStaminaCost: 2
-  dodgeStaminaCoust: 25
   jumpStaminaCoust: 25
+  jumpHeight: 4
+  jumpForwardSpeed: 5
+  freeFallSpeed: 3
+  dodgeStaminaCoust: 25
 --- !u!114 &-5222684108958751088
 MonoBehaviour:
   m_ObjectHideFlags: 0

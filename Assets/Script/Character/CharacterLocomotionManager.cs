@@ -8,12 +8,12 @@ namespace Horo
     {
         CharacterManager character;
         [Header("Ground Check & Jumping")]
-        [SerializeField] float gravityForce = -5.55f;
+        [SerializeField] protected float gravityForce = -5.55f;
         [SerializeField] LayerMask groundLayer;
         [SerializeField] float groundCheckSphereRadius = 1;
         [SerializeField] protected Vector3 yVelocity; // The force at which our character is pulled up or down(Jumping or Falling)
         [SerializeField] protected float groundedYVelocity = -20; // The force at which our character is sticking to the ground whilst they are grounded
-        [SerializeField] protected float fallstartYvelocity = -5; // The force at which our character begins to fall when they become ungrounded(Rises as they fall longer)
+        [SerializeField] protected float fallstartYVelocity = -5; // The force at which our character begins to fall when they become ungrounded(Rises as they fall longer)
         protected bool fallingVelocityHAsBeenSet = false;
         protected float inAirTimer = 0;
 
@@ -42,7 +42,7 @@ namespace Horo
                 if(!character.isJumping && !fallingVelocityHAsBeenSet)
                 {
                     fallingVelocityHAsBeenSet = true;
-                    yVelocity.y = fallstartYvelocity;
+                    yVelocity.y = fallstartYVelocity;
                 }
                 inAirTimer += Time.deltaTime;
                 character.animator.SetFloat("InAirTimer", inAirTimer);

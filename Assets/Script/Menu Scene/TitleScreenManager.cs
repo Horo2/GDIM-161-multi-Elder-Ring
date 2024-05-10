@@ -93,17 +93,19 @@ namespace Horo
         }
 
         //Character Slots
-
+        //在UI_Character_Save_Slot 选中的 Save slot 需要同步到TitleScreenManager中，防止出错，也用于删除存档时等操作时用
         public void SelecteCharacterSlot(CharacterSlot characterSlot)
         {
             currentSelectedSlot = characterSlot;
         }
 
+        // 绑定在 return button中，防止出错
         public void SelectNoSlot()
         {
             currentSelectedSlot = CharacterSlot.NO_SLOT;
         }
 
+        //如果目前选择的存档槽位不是NO_SLOT，尝试执行删除存档
         public void AttemptToDeleteCharacterSlot()
         {
             if(currentSelectedSlot != CharacterSlot.NO_SLOT)
@@ -113,6 +115,7 @@ namespace Horo
             }            
         }
 
+        //删除存档的具体逻辑
         public void DeleteCharacterSlot()
         {
             deleteCharacterSlotPopUp.SetActive(false);
