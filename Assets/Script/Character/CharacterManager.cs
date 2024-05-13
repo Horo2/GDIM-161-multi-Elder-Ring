@@ -5,13 +5,18 @@ using Unity.Netcode;
 using Unity.VisualScripting;
 
 namespace Horo
-{
+{   
     public class CharacterManager : NetworkBehaviour
     {
+        [Header("Status")]
+        public NetworkVariable<bool> isDead = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
         public CharacterController characterController;
         [HideInInspector] public Animator animator;
 
         [HideInInspector] public CharacterNetworkManager characterNetworkManager;
+        [HideInInspector] public CharacterEffectManager characterEffectManager;
+        [HideInInspector] public CharacterAnimatorManager characterAnimatorManager;
 
         [Header("Flags")]
         public bool isPerformingAction = false;
@@ -30,7 +35,9 @@ namespace Horo
 
             characterController = GetComponent<CharacterController>();
             animator = GetComponent<Animator>();
-            characterNetworkManager = GetComponent<CharacterNetworkManager>();          
+            characterNetworkManager = GetComponent<CharacterNetworkManager>();
+            characterEffectManager = GetComponent<CharacterEffectManager>();
+            characterAnimatorManager = GetComponent <CharacterAnimatorManager>();
         }
 
         protected virtual void Update()
@@ -71,6 +78,39 @@ namespace Horo
         }
 
         protected virtual void LateUpdate()
+        {
+
+        }
+
+        public virtual IEnumerator ProcessDeathEvent(bool manuallySelectDeathAnimation = false)
+        {
+            if(IsOwner)
+            {
+                characterNetworkManager.currentHealth.Value = 0;
+                isDead.Value = true;
+
+                // Reset any flags here that need to be reset
+                // Nothing yet
+
+                // If we are not grounded, play an aerial death animation
+
+                if(!manuallySelectDeathAnimation)
+                {
+                    characterAnimatorManager.PlayerTargetActionAnimation("Dead_01", true);
+                }
+            }
+
+            // Play some death SFX
+
+            yield return new WaitForSeconds(5);
+
+            // Award players with runes
+
+            // Disable character
+
+        }
+
+        public virtual void ReviveCharacter()
         {
 
         }

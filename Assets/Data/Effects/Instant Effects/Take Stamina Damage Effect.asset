@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6baab71dfd167d0438df62b25caa31fd, type: 3}
-  m_Name: New Take Stamina Damage Effect
+  m_Name: Take Stamina Damage Effect
   m_EditorClassIdentifier: 
   instantEffectID: 0
   staminaDamage: 25

@@ -6,6 +6,9 @@ namespace Horo
 {
     public class PlayerManager : CharacterManager
     {
+        [Header("DEBUG MENU")]
+        [SerializeField] bool respawnCharacter = false;
+
         [HideInInspector] public PlayerAnimatorManager playerAnimatorManager;
         [HideInInspector] public PlayerLocomotionManager playerLocomotionManager;
         [HideInInspector] public PlayerNetworkManager playerNetworkManager;
@@ -34,6 +37,8 @@ namespace Horo
 
             //Regen stamina
             playerStatsManager.RegencerateStamina();
+
+            DebugMenu();
         }
 
         protected override void LateUpdate()
@@ -58,6 +63,7 @@ namespace Horo
                 PlayerInputManager.instance.player = this;
                 WorldSaveGameManager.instance.player = this;
 
+                //这里指的是当+=前的数值发生变化时，执行+=后面的method
                 // Update the total amount of Health or Stamina when the stat linked to either changes
                 playerNetworkManager.vitality.OnValueChanged += playerNetworkManager.SetNewMaxHealthValue;
                 playerNetworkManager.endurance.OnValueChanged += playerNetworkManager.SetNewMaxStaminaValue;
@@ -70,6 +76,36 @@ namespace Horo
 
               
                 
+            }
+
+            //这里指的是当+=前的数值发生变化时，执行+=后面的method
+            playerNetworkManager.currentHealth.OnValueChanged += playerNetworkManager.CheckHP;
+        }
+
+        public override IEnumerator ProcessDeathEvent(bool manuallySelectDeathAnimation = false)
+        {
+            if (IsOwner)
+            {
+                PlayerUIManager.instance.playerUIPopUpManager.SendYouDiedPopUp();
+            }
+           
+            return base.ProcessDeathEvent(manuallySelectDeathAnimation);
+
+            // Check for players that are alive, if 0 respawn characters
+        }
+
+        public override void ReviveCharacter()
+        {
+            base.ReviveCharacter();
+
+            if(IsOwner)
+            {
+                playerNetworkManager.currentHealth.Value = playerNetworkManager.maxHealth.Value;
+                playerNetworkManager.currentStamina.Value = playerNetworkManager.maxStamina.Value;
+                // Restore focus points
+
+                // Player Rebirth effects
+                playerAnimatorManager.PlayerTargetActionAnimation("Empty", false);
             }
         }
 
@@ -104,6 +140,16 @@ namespace Horo
             playerNetworkManager.currentHealth.Value = currentCharacterData.currentHealth;
             playerNetworkManager.currentStamina.Value = currentCharacterData.currentStamina;
             PlayerUIManager.instance.playerUIHudManager.SetMaxStaminaValue(playerNetworkManager.maxStamina.Value);
+        }
+
+        // DEBUG DELETE LATER
+        private void DebugMenu()
+        {
+            if(respawnCharacter)
+            {
+                respawnCharacter = false;
+                ReviveCharacter();
+            }
         }
     }
 }

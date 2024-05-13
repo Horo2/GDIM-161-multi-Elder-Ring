@@ -242,7 +242,10 @@ namespace Horo
 
         private void NewGame()
         {
-           //Saves the newly Created CHaracters Stats, and items (When creation screen is added)
+            //Saves the newly Created CHaracters Stats, and items (When creation screen is added)
+            player.playerNetworkManager.vitality.Value = 15;
+            player.playerNetworkManager.endurance.Value = 10;
+
            SaveGame();
             Debug.Log("start new game!!");
            StartCoroutine(LoadWorldScene());
