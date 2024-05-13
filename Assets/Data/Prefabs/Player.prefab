@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: -862435619778825485}
   - component: {fileID: -5222684108958751088}
   - component: {fileID: -6123092556892285172}
+  - component: {fileID: 2090951349328931020}
   - component: {fileID: 7492405540528239366}
   - component: {fileID: 6165535876072779693}
   m_Layer: 6
@@ -76,7 +77,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 951099334
+  GlobalObjectIdHash: 1019365169
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -150,12 +151,18 @@ MonoBehaviour:
     m_InternalValue: 0
   isSprinting:
     m_InternalValue: 0
-  endurance:
-    m_InternalValue: 10
+  currentHealth:
+    m_InternalValue: 0
+  maxHealth:
+    m_InternalValue: 0
   currentStamina:
     m_InternalValue: 0
   maxStamina:
     m_InternalValue: 0
+  vitality:
+    m_InternalValue: 10
+  endurance:
+    m_InternalValue: 10
   characterName:
     m_InternalValue:
       utf8LengthInBytes: 9
@@ -282,6 +289,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6de053f25d224e429c0e145b0a441ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2090951349328931020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 17022164212094528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c75804b6edb9842aeb7a0ea64903cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectToTest: {fileID: 11400000, guid: ae8cf51e84734cb48b0818ca8747fd51, type: 2}
+  processEffect: 0
 --- !u!143 &7492405540528239366
 CharacterController:
   m_ObjectHideFlags: 0

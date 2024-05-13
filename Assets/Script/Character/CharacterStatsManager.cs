@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Horo
@@ -20,6 +21,11 @@ namespace Horo
             character = GetComponent<CharacterManager>();
         }
 
+        protected virtual void Start()
+        {
+            
+        }
+
         public int CalcuateStaminaBasedOnEnduranceLevel(int endurance)
         {
             float stamina = 0;
@@ -28,6 +34,16 @@ namespace Horo
             stamina = endurance * 10;
 
             return Mathf.RoundToInt(stamina);
+        }
+
+        public int CalcuateHealthBasedOnVitalityLevel(int vitality)
+        {
+            float health = 0;
+
+            // Create an equation for how you want your stamina to be calculated
+            health = vitality * 15;
+
+            return Mathf.RoundToInt(health);
         }
 
         public virtual void RegencerateStamina()

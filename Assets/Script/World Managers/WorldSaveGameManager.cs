@@ -123,7 +123,7 @@ namespace Horo
                 // If this profile slotis not taken, make a new one using this slot
                 currentChracterSlotBeingUsed = CharacterSlot.CharacterSlot_01;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
 
@@ -135,7 +135,7 @@ namespace Horo
                 // If this profile slotis not taken, make a new one using this slot
                 currentChracterSlotBeingUsed = CharacterSlot.CharacterSlot_02;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
 
@@ -147,7 +147,7 @@ namespace Horo
                 // If this profile slotis not taken, make a new one using this slot
                 currentChracterSlotBeingUsed = CharacterSlot.CharacterSlot_03;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
 
@@ -159,7 +159,7 @@ namespace Horo
                 // If this profile slotis not taken, make a new one using this slot
                 currentChracterSlotBeingUsed = CharacterSlot.CharacterSlot_04;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
 
@@ -171,7 +171,7 @@ namespace Horo
                 // If this profile slotis not taken, make a new one using this slot
                 currentChracterSlotBeingUsed = CharacterSlot.CharacterSlot_05;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
 
@@ -183,7 +183,7 @@ namespace Horo
                 // If this profile slotis not taken, make a new one using this slot
                 currentChracterSlotBeingUsed = CharacterSlot.CharacterSlot_06;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
 
@@ -195,7 +195,7 @@ namespace Horo
                 // If this profile slotis not taken, make a new one using this slot
                 currentChracterSlotBeingUsed = CharacterSlot.CharacterSlot_07;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
 
@@ -207,7 +207,7 @@ namespace Horo
                 // If this profile slotis not taken, make a new one using this slot
                 currentChracterSlotBeingUsed = CharacterSlot.CharacterSlot_08;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
 
@@ -219,7 +219,7 @@ namespace Horo
                 // If this profile slotis not taken, make a new one using this slot
                 currentChracterSlotBeingUsed = CharacterSlot.CharacterSlot_09;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
 
@@ -231,13 +231,21 @@ namespace Horo
                 // If this profile slotis not taken, make a new one using this slot
                 currentChracterSlotBeingUsed = CharacterSlot.CharacterSlot_010;
                 currentCharacterData = new CharacterSaveData();
-                StartCoroutine(LoadWorldScene());
+                NewGame();
                 return;
             }
 
             // If there are no free slots, notify the player
             TitleScreenManager.instance.DisplayNoFreeCharacterSlotsPopUp();
 
+        }
+
+        private void NewGame()
+        {
+           //Saves the newly Created CHaracters Stats, and items (When creation screen is added)
+           SaveGame();
+            Debug.Log("start new game!!");
+           StartCoroutine(LoadWorldScene());
         }
 
         public void LoadGame()
@@ -324,10 +332,10 @@ namespace Horo
         public IEnumerator LoadWorldScene()
         {
             // If you just wat 1 world scene use this
-            //AsyncOperation loadOperation = SceneManager.LoadSceneAsync(worldSceneIndex);
+            AsyncOperation loadOperation = SceneManager.LoadSceneAsync(worldSceneIndex);
 
             // If youare want to use different scenes for levels in your project use this
-            AsyncOperation loadOperation = SceneManager.LoadSceneAsync(currentCharacterData.sceneIndex);
+           // AsyncOperation loadOperation = SceneManager.LoadSceneAsync(currentCharacterData.sceneIndex);
 
             player.LoadGameDataToCurrentCharacterData(ref currentCharacterData);
 
