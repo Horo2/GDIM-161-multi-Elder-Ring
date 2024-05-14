@@ -23,4 +23,13 @@ namespace Horo
         CharacterSlot_010,
         NO_SLOT
     }
+
+    public enum WeaponModelSlot
+    {
+        RightHand,
+        LeftHand,
+        //Right Hips
+        //Left Hips
+        //Back
+    }
 }

@@ -6,6 +6,9 @@ namespace Horo
 {
     public class DamageCollider : MonoBehaviour
     {
+        [Header("Collider")]
+        protected Collider damagecollider;
+
         [Header("Damage")]
         public float physicalDamage = 0;                    // (TO DO, In the future will be split into "Standard, "STrike", "Slash" and "Pierce")
         public float magicDamage = 0;
@@ -57,6 +60,17 @@ namespace Horo
             damageEffect.contacktPoint = contactPoint;
 
             damageTarget.characterEffectManager.ProcessInstantEffect(damageEffect);
+        }
+
+        public virtual void EnableDamageCollider()
+        {
+            damagecollider.enabled = true;
+        }
+
+        public virtual void DisableDamageCollider()
+        {
+            damagecollider.enabled = false;
+            characterDamaged.Clear(); // We reset the characters that have been hit when we reset the collider, so they may be hit again
         }
     }
 }
