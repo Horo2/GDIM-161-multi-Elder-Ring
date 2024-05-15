@@ -44,7 +44,13 @@ namespace Horo
             //When the Scene Changes, run this logic
             SceneManager.activeSceneChanged += OnSceneChange;
 
-            instance.enabled = false;          
+            instance.enabled = false;
+
+            if(playerControls != null)
+            {
+                playerControls.Disable();
+            }
+            
         }
 
         private void OnSceneChange(Scene oldScene, Scene newScene)
@@ -53,12 +59,22 @@ namespace Horo
             if(newScene.buildIndex == WorldSaveGameManager.instance.GetWoroldSceneIndex())
             {
                 instance.enabled = true;
+
+                if (playerControls != null)
+                {
+                    playerControls.Enable();
+                }
             }
             //Otherwise we must be at the main menu, disable our palyers controls
             //this is so our palyer cant move around if we enter things like a character creation menu etc...
             else
             {
                 instance.enabled = false;
+
+                if (playerControls != null)
+                {
+                    playerControls.Disable();
+                }
             }
         }
 

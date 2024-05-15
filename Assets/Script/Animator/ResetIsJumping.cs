@@ -15,7 +15,10 @@ namespace Horo
                 character = animator.GetComponent<CharacterManager>();
             }
 
-            character.isJumping = false;
+            if(character.IsOwner)
+            {
+                character.characterNetworkManager.isJumping.Value = false;
+            }           
 
             // If you want to change the landing animation to a rolling landing and make the character move, change the canMove here.
             // character.canMove = true;

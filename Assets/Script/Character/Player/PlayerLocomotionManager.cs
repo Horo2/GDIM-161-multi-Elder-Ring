@@ -113,7 +113,7 @@ namespace Horo
 
         private void HandleJumpingMovement()
         {
-            if(player.isJumping)
+            if(player.characterNetworkManager.isJumping.Value)
             {
                 player.characterController.Move(jumpDirection * jumpForwardSpeed * Time.deltaTime);
             }
@@ -238,7 +238,7 @@ namespace Horo
                 return;
 
             // If we are already in a jump, we do not want to allow a jump again until the current jump has finished
-            if (player.isJumping)
+            if (player.characterNetworkManager.isJumping.Value)
                 return;
 
             //if we are not grounded, we do not want to allow a jump
@@ -248,7 +248,7 @@ namespace Horo
             // If we are two handing our weapon, play the two handed jump animation, otherwise play the one handed animation (TO DO)
             player.playerAnimatorManager.PlayerTargetActionAnimation("Main_Jump_01", false);
 
-            player.isJumping = true;
+            player.characterNetworkManager.isJumping.Value = true;
 
             player.playerNetworkManager.currentStamina.Value -= jumpStaminaCoust;
 

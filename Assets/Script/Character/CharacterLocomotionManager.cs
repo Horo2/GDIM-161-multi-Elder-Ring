@@ -39,7 +39,7 @@ namespace Horo
             else
             {
                 // If wea re not jumping, and our falling velocity has not been set
-                if(!character.isJumping && !fallingVelocityHAsBeenSet)
+                if(!character.characterNetworkManager.isJumping.Value && !fallingVelocityHAsBeenSet)
                 {
                     fallingVelocityHAsBeenSet = true;
                     yVelocity.y = fallstartYVelocity;
@@ -63,7 +63,7 @@ namespace Horo
         // For testing draws ground check spehre in scene view
         protected void OnDrawGizmosSelected()
         {
-            Gizmos.DrawSphere(character.transform.position, groundCheckSphereRadius);
+            //Gizmos.DrawSphere(character.transform.position, groundCheckSphereRadius);
         }
     }
 }

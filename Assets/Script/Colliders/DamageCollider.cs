@@ -24,7 +24,13 @@ namespace Horo
 
         private void OnTriggerEnter(Collider other)
         {
-           CharacterManager damageTarget = other.GetComponent<CharacterManager>();
+           CharacterManager damageTarget = other.GetComponentInParent<CharacterManager>();
+
+            // If you want to search on both the damageable character colliders & the character controller collider just check for null here and do the following
+            //if(damageTarget == null )
+            //{
+            //    damageTarget = other.GetComponent<CharacterManager>();
+            //}
 
             if(damageTarget != null)
             {
